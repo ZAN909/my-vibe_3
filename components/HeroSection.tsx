@@ -1,66 +1,62 @@
 export default function HeroSection() {
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-6 overflow-hidden">
-      {/* Gradient blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="animate-float absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-600/20 blur-[100px]" />
-        <div className="animate-float2 absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-blue-500/20 blur-[100px]" />
-        <div className="animate-float absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-cyan-400/10 blur-[80px]" />
+    <section className="relative flex flex-col min-h-screen bg-[#0a0a0a] overflow-hidden">
+      {/* Top status bar */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-[#0033FF] text-xs text-[#0033FF] uppercase tracking-widest">
+        <span>SYS://PORTFOLIO.V1</span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#00FFAA] animate-blink inline-block" />
+          ONLINE
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center">
-        <div className="animate-fade-up mb-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-sm text-purple-300">
-          <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          Available for work
+      {/* Main content */}
+      <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-16">
+        {/* Label */}
+        <div className="text-xs text-[#0033FF] uppercase tracking-[0.3em] mb-6">
+          [ AUDIOVISUAL ARTIST ]
         </div>
 
-        <h1
-          className="animate-fade-up text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight mb-4 gradient-text"
-          style={{ animationDelay: "0.1s", opacity: 0 }}
-        >
-          추호승
-        </h1>
+        {/* Name with glitch */}
+        <div className="relative mb-8">
+          <h1
+            className="glitch-wrapper text-[clamp(3.5rem,12vw,9rem)] font-bold leading-none tracking-tight uppercase"
+            data-text="추호승"
+          >
+            추호승
+          </h1>
+        </div>
 
-        <p
-          className="animate-fade-up text-xl sm:text-2xl text-slate-300 mb-3 font-light"
-          style={{ animationDelay: "0.2s", opacity: 0 }}
-        >
-          Audiovisual Artist
+        {/* Description */}
+        <p className="text-sm text-[#7fa8b8] max-w-md leading-relaxed mb-12 tracking-wide">
+          사운드와 비주얼이 교차하는 경험을 만듭니다.<br />
+          SOUND × VISUAL × PERFORMANCE
         </p>
 
-        <p
-          className="animate-fade-up text-base text-slate-400 mb-10 max-w-md leading-relaxed"
-          style={{ animationDelay: "0.3s", opacity: 0 }}
-        >
-          사운드와 비주얼이 만나는 순간을 만들어냅니다.
-        </p>
-
-        <div
-          className="animate-fade-up flex gap-4"
-          style={{ animationDelay: "0.4s", opacity: 0 }}
-        >
+        {/* CTA */}
+        <div className="flex gap-4 flex-wrap">
           <a
             href="#contact"
-            className="px-7 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-500 hover:to-blue-400 transition-all shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5"
+            className="px-8 py-3 bg-[#0033FF] text-white text-xs uppercase tracking-widest hover:bg-white hover:text-[#0033FF] transition-colors duration-75"
           >
-            Contact
+            CONTACT
           </a>
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-7 py-3 rounded-xl font-medium glass text-slate-200 hover:text-white transition-all hover:-translate-y-0.5"
+            className="px-8 py-3 cyber-border text-xs uppercase tracking-widest transition-colors duration-75"
           >
-            Resume
+            RESUME
           </a>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-500 text-xs">
-        <span>scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-slate-500 to-transparent" />
+      {/* Bottom info bar */}
+      <div className="flex items-center justify-between px-6 py-3 border-t border-[#1a1a1a] text-xs text-[#333] uppercase tracking-widest">
+        <span>KR / SEOUL</span>
+        <span>© 2025 추호승</span>
+        <span className="hidden sm:block">SOUND · VISUAL · PERFORMANCE</span>
       </div>
     </section>
   );

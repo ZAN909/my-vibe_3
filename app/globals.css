@@ -1,63 +1,110 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0d1a;
-  --foreground: #f0f0ff;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --blue: #0033FF;
+  --cyan: #00CFFF;
+  --green: #00FFAA;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-space-mono), "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono);
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-30px) scale(1.05); }
+/* Scanline overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
 
-@keyframes float2 {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(25px) scale(0.97); }
+/* Animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  5% { clip-path: inset(10% 0 60% 0); transform: translate(-4px, 2px); }
+  10% { clip-path: inset(50% 0 30% 0); transform: translate(4px, -2px); }
+  15% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 1px); }
+  20% { clip-path: inset(0 0 100% 0); transform: translate(0); }
 }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  5% { clip-path: inset(60% 0 10% 0); transform: translate(4px, -1px); }
+  10% { clip-path: inset(20% 0 50% 0); transform: translate(-4px, 2px); }
+  15% { clip-path: inset(5% 0 80% 0); transform: translate(2px, -1px); }
+  20% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-float { animation: float 8s ease-in-out infinite; }
-.animate-float2 { animation: float2 10s ease-in-out infinite; }
-.animate-gradient { animation: gradient-shift 6s ease infinite; background-size: 200% 200%; }
-.animate-fade-up { animation: fade-up 0.7s ease forwards; }
-
-.glass {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
 }
 
-.glass:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(139, 92, 246, 0.4);
+.animate-blink { animation: blink 1s step-end infinite; }
+.animate-fade-in { animation: fade-in 0.5s ease forwards; }
+
+.glitch-wrapper {
+  position: relative;
+}
+.glitch-wrapper::before,
+.glitch-wrapper::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: var(--cyan);
+}
+.glitch-wrapper::before {
+  animation: glitch-1 4s infinite;
+  animation-delay: 0.5s;
+}
+.glitch-wrapper::after {
+  content: attr(data-text);
+  color: #FF2200;
+  animation: glitch-2 4s infinite;
+  animation-delay: 0.7s;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #a78bfa, #60a5fa, #67e8f9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.cyber-border {
+  border: 1px solid #0033FF;
+}
+.cyber-border:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.section-blue {
+  background: #0033FF;
+  color: #ffffff;
 }
