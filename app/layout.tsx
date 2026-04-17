@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "홍길동 — Frontend Developer",
+  title: "추호승 — Frontend Developer",
   description: "좋은 코드로 더 나은 경험을 만드는 프론트엔드 개발자입니다.",
 };
 

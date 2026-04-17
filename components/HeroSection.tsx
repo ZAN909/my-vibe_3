@@ -19,7 +19,7 @@ export default function HeroSection() {
           className="animate-fade-up text-6xl sm:text-7xl md:text-8xl font-bold tracking-tight mb-4 gradient-text"
           style={{ animationDelay: "0.1s", opacity: 0 }}
         >
-          홍길동
+          추호승
         </h1>
 
         <p
