@@ -98,22 +98,47 @@ body::before {
 }
 
 @keyframes content-glitch {
-  0%   { transform: translate(0, 0); filter: none; opacity: 1; }
-  4%   { transform: translate(-8px, 0); filter: hue-rotate(90deg) brightness(1.8); }
-  6%   { transform: translate(8px, -2px); filter: hue-rotate(-90deg); clip-path: inset(20% 0 40% 0); }
-  8%   { transform: translate(-5px, 2px); filter: none; clip-path: none; }
-  11%  { transform: translate(10px, 0); filter: hue-rotate(180deg) brightness(2); clip-path: inset(55% 0 10% 0); }
-  13%  { transform: translate(0, 0); filter: none; clip-path: none; opacity: 0.4; }
-  55%  { transform: translate(0, 0); filter: none; opacity: 0.4; }
-  60%  { transform: translate(-6px, 1px); filter: hue-rotate(90deg); clip-path: inset(30% 0 50% 0); }
-  64%  { transform: translate(7px, -2px); filter: brightness(2); clip-path: inset(60% 0 15% 0); }
-  68%  { transform: translate(-4px, 0); filter: hue-rotate(-180deg); clip-path: none; }
-  72%  { transform: translate(5px, 1px); filter: none; }
-  76%  { transform: translate(0, 0); filter: none; opacity: 1; clip-path: none; }
-  100% { transform: translate(0, 0); filter: none; opacity: 1; clip-path: none; }
+  0%   { transform: translate(0) skewX(0); filter: none; opacity: 1; clip-path: none; }
+  2%   { transform: translate(-25px, 4px) skewX(-6deg); filter: brightness(4) hue-rotate(90deg); clip-path: inset(10% 0 65% 0); }
+  3%   { transform: translate(30px, -5px) skewX(8deg); filter: hue-rotate(-180deg) saturate(10) brightness(2); clip-path: inset(60% 0 8% 0); }
+  4%   { transform: translate(-18px, 2px); filter: invert(1) brightness(3); clip-path: inset(30% 0 35% 0); }
+  5%   { transform: translate(35px, 0) skewX(-12deg); filter: brightness(6) hue-rotate(270deg); clip-path: none; opacity: 0.3; }
+  6%   { transform: translate(-30px, 6px); filter: hue-rotate(90deg) saturate(20); clip-path: inset(50% 0 18% 0); opacity: 1; }
+  7%   { transform: translate(22px, -3px) skewX(5deg); filter: invert(0.9) brightness(2); clip-path: none; }
+  8%   { transform: translate(-40px, 2px); filter: hue-rotate(-90deg) brightness(4); clip-path: inset(75% 0 4% 0); }
+  9%   { transform: translate(0) skewX(0); filter: none; clip-path: none; opacity: 0.05; }
+  10%  { opacity: 1; transform: translate(-20px, 0); filter: hue-rotate(180deg); }
+  11%  { opacity: 0.05; transform: translate(0); filter: none; clip-path: none; }
+  12%  { opacity: 1; transform: translate(30px, -4px) skewX(-8deg); filter: brightness(5) saturate(15); clip-path: inset(20% 0 55% 0); }
+  13%  { transform: translate(0) skewX(0); filter: none; clip-path: none; opacity: 0; }
+  55%  { transform: translate(0) skewX(0); filter: none; opacity: 0; clip-path: none; }
+  57%  { transform: translate(-28px, 5px) skewX(7deg); filter: brightness(5) hue-rotate(90deg); clip-path: inset(15% 0 55% 0); opacity: 0.9; }
+  58%  { transform: translate(32px, -4px) skewX(-9deg); filter: hue-rotate(-180deg) saturate(12); clip-path: inset(62% 0 6% 0); }
+  59%  { transform: translate(-20px, 3px); filter: invert(1) brightness(4); clip-path: none; opacity: 0.2; }
+  60%  { transform: translate(38px, 0) skewX(10deg); filter: brightness(7) hue-rotate(270deg); clip-path: inset(40% 0 22% 0); opacity: 1; }
+  61%  { transform: translate(-35px, 5px) skewX(-6deg); filter: hue-rotate(90deg) saturate(18); clip-path: inset(8% 0 72% 0); }
+  62%  { transform: translate(24px, -3px); filter: invert(0.95) brightness(3); clip-path: none; opacity: 0.4; }
+  63%  { transform: translate(-42px, 2px) skewX(5deg); filter: hue-rotate(-90deg) brightness(5); clip-path: inset(55% 0 12% 0); }
+  64%  { transform: translate(18px, -5px) skewX(-4deg); filter: brightness(4) saturate(10); clip-path: inset(28% 0 42% 0); }
+  65%  { transform: translate(0) skewX(0); filter: none; clip-path: none; opacity: 0.05; }
+  67%  { opacity: 0.9; transform: translate(-15px, 0); filter: hue-rotate(90deg); }
+  69%  { opacity: 0.05; transform: translate(0); filter: none; }
+  71%  { transform: translate(0) skewX(0); filter: none; clip-path: none; opacity: 1; }
+  100% { transform: translate(0) skewX(0); filter: none; opacity: 1; clip-path: none; }
 }
 
 .content-glitching { animation: content-glitch 3.5s forwards; }
+
+@keyframes sys-error-flash {
+  0%, 100%      { opacity: 0; }
+  13%, 54%      { opacity: 0; }
+  14%, 53%      { opacity: 1; }
+  20%           { opacity: 0.3; }
+  30%           { opacity: 1; }
+  40%           { opacity: 0.5; }
+}
+
+.sys-error-active { animation: sys-error-flash 3.5s forwards; }
 
 @keyframes blackout-seq {
   0%   { opacity: 0; }

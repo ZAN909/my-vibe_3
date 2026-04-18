@@ -8,19 +8,23 @@ const ParticleCanvas = dynamic(() => import('./ParticleCanvas'), { ssr: false })
 export default function HeroSection() {
   const blackoutRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const sysErrorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const trigger = () => {
       const overlay = blackoutRef.current;
       const content = contentRef.current;
-      if (!overlay || !content) return;
+      const sysErr = sysErrorRef.current;
+      if (!overlay || !content || !sysErr) return;
 
       overlay.classList.remove('blackout-active');
       content.classList.remove('content-glitching');
+      sysErr.classList.remove('sys-error-active');
       void overlay.offsetWidth;
 
       overlay.classList.add('blackout-active');
       content.classList.add('content-glitching');
+      sysErr.classList.add('sys-error-active');
     };
 
     const id = setInterval(trigger, 15000);
@@ -38,6 +42,22 @@ export default function HeroSection() {
         className="absolute inset-0 bg-[#0a0a0a] pointer-events-none"
         style={{ zIndex: 15, opacity: 0 }}
       />
+      {/* System error flash */}
+      <div
+        ref={sysErrorRef}
+        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+        style={{ zIndex: 16, opacity: 0 }}
+      >
+        <div className="text-[#FF2200] text-xs uppercase tracking-[0.4em] mb-2" style={{ fontFamily: 'var(--font-space-mono)' }}>
+          ██ CRITICAL SYSTEM ERROR ██
+        </div>
+        <div className="text-[#FF2200] text-[clamp(2rem,6vw,4rem)]" style={{ fontFamily: 'var(--font-vt323)' }}>
+          SYS://FAILURE
+        </div>
+        <div className="text-[#FF2200] text-xs uppercase tracking-[0.3em] mt-2 opacity-70">
+          ERR_CODE: 0x0033FF — SIGNAL LOST
+        </div>
+      </div>
 
       {/* Top status bar */}
       <div className="relative z-10 flex items-center justify-between px-6 py-3 border-b border-[#0033FF] text-xs text-[#0033FF] uppercase tracking-widest">
