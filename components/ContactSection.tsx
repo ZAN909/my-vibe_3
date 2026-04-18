@@ -57,7 +57,7 @@ export default function ContactSection() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-white/20 flex justify-between text-xs opacity-40 uppercase tracking-widest">
-          <span>VHS © 2025</span>
+          <span>VHS</span>
           <span>AUDIOVISUAL ARTIST</span>
         </div>
       </div>
