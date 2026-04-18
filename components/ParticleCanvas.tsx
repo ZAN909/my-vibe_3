@@ -2,56 +2,101 @@
 
 import { useEffect, useRef } from 'react';
 
-const REPEL_RADIUS = 120;
-const REPEL_STRENGTH = 6;
-const SPRING = 0.1;
-const DAMPING = 0.88;
-const RGB_CHANNELS = [
-  { color: '#FF2200', dx: -2, dy: -1 },
-  { color: '#0033FF', dx:  0, dy:  0 },
-  { color: '#00CFFF', dx:  2, dy:  1 },
+const FONT_SIZE = 11;
+const LINE_HEIGHT = 19;
+const GAP = 10;
+const HIGHLIGHT_CHANCE = 0.18;
+const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700', '#FF6600'];
+
+const WORD_POOL = [
+  'VHS', 'AUDIO', 'VISUAL', 'PERFORMANCE', 'GENERATIVE', 'INTERACTIVE',
+  'INSTALLATION', 'AUDIOVISUAL', 'LIVE', 'SYNTHESIZER', 'SEQUENCER',
+  'PROJECTION', 'MAPPING', 'SIGNAL', 'FREQUENCY', 'NOISE', 'PATTERN',
+  'SYSTEM', 'FIELD', 'SPACE', 'TIME', 'BODY', 'SCREEN', 'LIGHT',
+  'WAVE', 'PULSE', 'LOOP', 'MODULAR', 'ANALOG', 'DIGITAL', 'CODE',
+  'IMAGE', 'ARTIST', 'SEOUL', '추호승', '소리', '빛', '공간', '신체',
+  '경험', '생성', '반복', '신호', '파동', 'HO-SEUNG', 'CHOO',
+  'ABLETON', 'MAX/MSP', 'TOUCHDESIGNER', 'RESOLUME', 'AV',
+  '░░░░', '▓▓▓', '#####', '>>>', '___', '[VHS]', '{AV}', '///',
 ];
 
-const CHARS = [
-  '#', '>', '_', '/', '|', '[', ']', '*', '░', '▓',
-  'VHS', 'AUDIO', 'VISUAL', '추호승', 'AV',
-];
-
-type Particle = {
+type WordItem = {
+  text: string;
+  highlight: string | null;
   x: number;
-  y: number;
-  homeX: number;
-  homeY: number;
-  vx: number;
-  vy: number;
-  char: string;
-  size: number;
-  opacity: number;
+  width: number;
 };
 
-function initParticles(width: number, height: number): Particle[] {
-  if (width === 0 || height === 0) return [];
-  const cols = Math.floor(width / 55);
-  const rows = Math.floor(height / 38);
-  return Array.from({ length: cols * rows }, (_, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const x = (col + 0.5) * (width / cols) + (Math.random() - 0.5) * 16;
-    const y = (row + 0.5) * (height / rows) + (Math.random() - 0.5) * 12;
-    return {
-      x, y, homeX: x, homeY: y,
-      vx: 0, vy: 0,
-      char: CHARS[Math.floor(Math.random() * CHARS.length)],
-      size: 10 + Math.floor(Math.random() * 5),
-      opacity: 0.35 + Math.random() * 0.3,
-    };
-  });
+type Row = {
+  y: number;
+  direction: 1 | -1;
+  speed: number;
+  offset: number;
+  items: WordItem[];
+  unitWidth: number;
+};
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildRow(
+  ctx: CanvasRenderingContext2D,
+  index: number,
+  y: number,
+  screenWidth: number
+): Row {
+  ctx.font = `${FONT_SIZE}px "Space Mono", monospace`;
+
+  const words = shuffle(WORD_POOL);
+  let totalW = 0;
+  const unitItems: WordItem[] = [];
+  let i = 0;
+
+  while (totalW < screenWidth * 1.5) {
+    const word = words[i % words.length];
+    const w = ctx.measureText(word).width;
+    unitItems.push({
+      text: word,
+      highlight: Math.random() < HIGHLIGHT_CHANCE
+        ? HIGHLIGHT_COLORS[Math.floor(Math.random() * HIGHLIGHT_COLORS.length)]
+        : null,
+      x: totalW,
+      width: w,
+    });
+    totalW += w + GAP;
+    i++;
+  }
+
+  const unitWidth = totalW;
+  const items: WordItem[] = [];
+  for (let rep = 0; rep < 3; rep++) {
+    for (const item of unitItems) {
+      items.push({ ...item, x: item.x + rep * unitWidth });
+    }
+  }
+
+  const direction = (index % 2 === 0 ? 1 : -1) as 1 | -1;
+  const speed = 0.4 + (index % 7) * 0.18;
+
+  return {
+    y,
+    direction,
+    speed,
+    offset: Math.random() * unitWidth,
+    items,
+    unitWidth,
+  };
 }
 
 export default function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef<{ x: number; y: number } | null>(null);
-  const particlesRef = useRef<Particle[]>([]);
+  const rowsRef = useRef<Row[]>([]);
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
@@ -60,74 +105,59 @@ export default function ParticleCanvas() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const resize = () => {
+    const init = () => {
       const w = canvas.offsetWidth || window.innerWidth;
       const h = canvas.offsetHeight || window.innerHeight;
       canvas.width = w;
       canvas.height = h;
-      particlesRef.current = initParticles(w, h);
+
+      const numRows = Math.ceil(h / LINE_HEIGHT) + 1;
+      rowsRef.current = Array.from({ length: numRows }, (_, i) =>
+        buildRow(ctx, i, i * LINE_HEIGHT + FONT_SIZE, w)
+      );
     };
 
-    // 레이아웃이 완전히 잡힌 뒤 초기화
-    requestAnimationFrame(resize);
-
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-        mouseRef.current = { x, y };
-      } else {
-        mouseRef.current = null;
-      }
-    };
-    const onMouseLeave = () => { mouseRef.current = null; };
-
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseleave', onMouseLeave);
+    requestAnimationFrame(init);
+    window.addEventListener('resize', init);
 
     const tick = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const mouse = mouseRef.current;
+      ctx.font = `${FONT_SIZE}px "Space Mono", monospace`;
 
-      for (const p of particlesRef.current) {
-        if (mouse) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < REPEL_RADIUS && dist > 0) {
-            const force = (REPEL_RADIUS - dist) / REPEL_RADIUS * REPEL_STRENGTH;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
+      for (const row of rowsRef.current) {
+        row.offset += row.speed * row.direction;
+        if (row.offset >= row.unitWidth) row.offset -= row.unitWidth;
+        if (row.offset < 0) row.offset += row.unitWidth;
+
+        const startX = -row.offset;
+
+        for (const item of row.items) {
+          const x = startX + item.x;
+          if (x + item.width < 0 || x > canvas.width) continue;
+
+          if (item.highlight) {
+            const pad = 2;
+            ctx.fillStyle = item.highlight;
+            ctx.fillRect(x - pad, row.y - FONT_SIZE, item.width + pad * 2, FONT_SIZE + 4);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = '#000000';
+          } else {
+            ctx.globalAlpha = 0.55;
+            ctx.fillStyle = '#ffffff';
           }
-        }
 
-        p.vx += (p.homeX - p.x) * SPRING;
-        p.vy += (p.homeY - p.y) * SPRING;
-        p.vx *= DAMPING;
-        p.vy *= DAMPING;
-        p.x += p.vx;
-        p.y += p.vy;
-
-        ctx.font = `${p.size}px "Space Mono", monospace`;
-        for (const ch of RGB_CHANNELS) {
-          ctx.fillStyle = ch.color;
-          ctx.globalAlpha = p.opacity * 0.7;
-          ctx.fillText(p.char, p.x + ch.dx, p.y + ch.dy);
+          ctx.fillText(item.text, x, row.y);
+          ctx.globalAlpha = 1;
         }
       }
 
-      ctx.globalAlpha = 1;
       rafRef.current = requestAnimationFrame(tick);
     };
     tick();
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseleave', onMouseLeave);
+      window.removeEventListener('resize', init);
     };
   }, []);
 
