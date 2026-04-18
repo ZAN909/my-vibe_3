@@ -2,7 +2,7 @@ import { SKILLS } from "@/data/skills";
 
 const CATEGORY_LABEL: Record<string, string> = {
   visual: "VISUAL",
-  sound: "SOUND",
+  sound: "AUDIO",
   performance: "PERFORMANCE",
   etc: "ETC",
 };

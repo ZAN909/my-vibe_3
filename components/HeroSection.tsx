@@ -38,7 +38,7 @@ export default function HeroSection() {
         {/* Description */}
         <p className="text-sm text-[#7fa8b8] max-w-md leading-relaxed mb-12 tracking-wide">
           사운드와 비주얼이 교차하는 경험을 만듭니다.<br />
-          SOUND × VISUAL × PERFORMANCE
+          AUDIO × VISUAL × PERFORMANCE
         </p>
 
         {/* CTA */}
@@ -64,7 +64,7 @@ export default function HeroSection() {
       <div className="relative z-10 flex items-center justify-between px-6 py-3 border-t border-[#1a1a1a] text-xs text-[#333] uppercase tracking-widest">
         <span>KR / SEOUL</span>
         <span>© 2025 추호승</span>
-        <span className="hidden sm:block">SOUND · VISUAL · PERFORMANCE</span>
+        <span className="hidden sm:block">AUDIO · VISUAL · PERFORMANCE</span>
       </div>
     </section>
   );
