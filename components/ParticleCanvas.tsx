@@ -3,8 +3,9 @@
 import { useEffect, useRef } from 'react';
 
 const FONT_SIZE = 11;
+const LINE_HEIGHT = 19;
 const GAP = 10;
-const HIGHLIGHT_CHANCE = 0.15;
+const HIGHLIGHT_CHANCE = 0.16;
 const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700'];
 
 const WORD_POOL = [
@@ -17,28 +18,25 @@ const WORD_POOL = [
   '경험', '생성', '반복', '신호', '파동', 'HO-SEUNG', 'CHOO',
   'ABLETON', 'MAX/MSP', 'TOUCHDESIGNER', 'RESOLUME', 'AV', 'SEOUL',
   '37.5665°N', '126.9780°E', 'SYS://ACTIVE', 'KR-0091',
-  '░░░░', '▓▓▓', '>>>', '___', '[VHS]', '경고', 'OFF-WORLD',
+  '░░░░', '▓▓▓', '#####', '>>>', '___', '[VHS]', '///ERROR///',
+  '경고', '시스템', 'OFF-WORLD', 'UNIT:01', '0x0033FF',
 ];
 
-type WaveWord = {
+type WordItem = {
   text: string;
   highlight: string | null;
-  streamX: number;
+  x: number;
   width: number;
 };
 
-type WaveStream = {
-  baseY: number;
-  amplitude: number;
-  frequency: number;
-  phaseSpeed: number;
-  phase: number;
-  scrollSpeed: number;
+type Row = {
+  y: number;
+  direction: 1 | -1;
+  baseSpeed: number;
   speedMult: number;
   nextSpeedChange: number;
-  direction: 1 | -1;
   offset: number;
-  words: WaveWord[];
+  items: WordItem[];
   unitWidth: number;
 };
 
@@ -51,28 +49,28 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildStream(
+function buildRow(
   ctx: CanvasRenderingContext2D,
   index: number,
-  baseY: number,
+  y: number,
   screenWidth: number
-): WaveStream {
+): Row {
   ctx.font = `${FONT_SIZE}px "Space Mono", monospace`;
 
   const words = shuffle(WORD_POOL);
   let totalW = 0;
-  const unitWords: WaveWord[] = [];
+  const unitItems: WordItem[] = [];
   let i = 0;
 
   while (totalW < screenWidth * 1.5) {
     const word = words[i % words.length];
     const w = ctx.measureText(word).width;
-    unitWords.push({
+    unitItems.push({
       text: word,
       highlight: Math.random() < HIGHLIGHT_CHANCE
         ? HIGHLIGHT_COLORS[Math.floor(Math.random() * HIGHLIGHT_COLORS.length)]
         : null,
-      streamX: totalW,
+      x: totalW,
       width: w,
     });
     totalW += w + GAP;
@@ -80,37 +78,36 @@ function buildStream(
   }
 
   const unitWidth = totalW;
-  const allWords: WaveWord[] = [];
+  const items: WordItem[] = [];
   for (let rep = 0; rep < 3; rep++) {
-    for (const w of unitWords) {
-      allWords.push({ ...w, streamX: w.streamX + rep * unitWidth });
+    for (const item of unitItems) {
+      items.push({ ...item, x: item.x + rep * unitWidth });
     }
   }
 
+  const direction = (index % 2 === 0 ? 1 : -1) as 1 | -1;
+  const baseSpeed = 0.3 + Math.random() * 1.0;
+
   return {
-    baseY,
-    amplitude: 22 + Math.random() * 38,
-    frequency: 0.005 + Math.random() * 0.013,
-    phaseSpeed: 0.007 + Math.random() * 0.011,
-    phase: Math.random() * Math.PI * 2,
-    scrollSpeed: 0.25 + Math.random() * 0.75,
+    y,
+    direction,
+    baseSpeed,
     speedMult: 1.0,
-    nextSpeedChange: 60 + Math.floor(Math.random() * 120),
-    direction: (index % 2 === 0 ? 1 : -1) as 1 | -1,
+    nextSpeedChange: Math.floor(60 + Math.random() * 120),
     offset: Math.random() * unitWidth,
-    words: allWords,
+    items,
     unitWidth,
   };
 }
 
 export default function ParticleCanvas() {
-  const GLITCH_INTERVAL = 15;
+  const GLITCH_INTERVAL = 15; // seconds — must match HeroSection interval
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamsRef = useRef<WaveStream[]>([]);
+  const rowsRef = useRef<Row[]>([]);
   const rafRef = useRef<number>(0);
   const frameRef = useRef<number>(0);
-  const glitchTimeRef = useRef<number>(GLITCH_INTERVAL);
+  const glitchTimeRef = useRef<number>(GLITCH_INTERVAL); // start at max so first cycle is full
   const lastFrameTimeRef = useRef<number>(0);
 
   useEffect(() => {
@@ -125,10 +122,9 @@ export default function ParticleCanvas() {
       canvas.width = w;
       canvas.height = h;
 
-      const streamSpacing = 70;
-      const count = Math.ceil(h / streamSpacing) + 1;
-      streamsRef.current = Array.from({ length: count }, (_, i) =>
-        buildStream(ctx, i, i * streamSpacing + streamSpacing / 2, w)
+      const numRows = Math.ceil(h / LINE_HEIGHT) + 1;
+      rowsRef.current = Array.from({ length: numRows }, (_, i) =>
+        buildRow(ctx, i, i * LINE_HEIGHT + FONT_SIZE, w)
       );
     };
 
@@ -146,6 +142,7 @@ export default function ParticleCanvas() {
 
       glitchTimeRef.current = Math.min(glitchTimeRef.current + dt, GLITCH_INTERVAL);
       const t = glitchTimeRef.current / GLITCH_INTERVAL;
+      // 0.5x(slow) → 1.0x(full) with 4th-power exponential curve
       const cycleSpeedMult = 0.5 + 0.5 * Math.pow(t, 4);
 
       frameRef.current++;
@@ -154,41 +151,37 @@ export default function ParticleCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.font = `${FONT_SIZE}px "Space Mono", monospace`;
 
-      for (const stream of streamsRef.current) {
-        // Random speed burst
-        if (frame >= stream.nextSpeedChange) {
-          stream.speedMult = 0.2 + Math.random() * 2.5;
-          stream.nextSpeedChange = frame + 60 + Math.floor(Math.random() * 200);
+      for (const row of rowsRef.current) {
+        // Random speed variation
+        if (frame >= row.nextSpeedChange) {
+          row.speedMult = 0.2 + Math.random() * 2.5;
+          row.nextSpeedChange = frame + 60 + Math.floor(Math.random() * 200);
         }
-        stream.speedMult += (1.0 - stream.speedMult) * 0.01;
+        // Gradually ease speedMult back toward 1
+        row.speedMult += (1.0 - row.speedMult) * 0.01;
 
-        stream.phase += stream.phaseSpeed;
-        stream.offset += stream.scrollSpeed * stream.speedMult * cycleSpeedMult * stream.direction;
-        if (stream.offset >= stream.unitWidth) stream.offset -= stream.unitWidth;
-        if (stream.offset < 0) stream.offset += stream.unitWidth;
+        row.offset += row.baseSpeed * row.speedMult * cycleSpeedMult * row.direction;
+        if (row.offset >= row.unitWidth) row.offset -= row.unitWidth;
+        if (row.offset < 0) row.offset += row.unitWidth;
 
-        for (const word of stream.words) {
-          const screenX = word.streamX - stream.offset;
-          if (screenX + word.width < 0 || screenX > canvas.width) continue;
+        const startX = -row.offset;
 
-          const waveY = stream.baseY
-            + stream.amplitude * Math.sin(screenX * stream.frequency + stream.phase);
+        for (const item of row.items) {
+          const x = startX + item.x;
+          if (x + item.width < 0 || x > canvas.width) continue;
 
-          // Opacity modulated by wave position — brighter at peaks/troughs
-          const waveIntensity = Math.abs(Math.sin(screenX * stream.frequency + stream.phase));
-
-          if (word.highlight) {
+          if (item.highlight) {
             const pad = 2;
-            ctx.fillStyle = word.highlight;
-            ctx.fillRect(screenX - pad, waveY - FONT_SIZE, word.width + pad * 2, FONT_SIZE + 4);
+            ctx.fillStyle = item.highlight;
+            ctx.fillRect(x - pad, row.y - FONT_SIZE, item.width + pad * 2, FONT_SIZE + 4);
             ctx.globalAlpha = 1;
             ctx.fillStyle = '#000000';
           } else {
-            ctx.globalAlpha = 0.25 + waveIntensity * 0.35;
+            ctx.globalAlpha = 0.5;
             ctx.fillStyle = '#ffffff';
           }
 
-          ctx.fillText(word.text, screenX, waveY);
+          ctx.fillText(item.text, x, row.y);
           ctx.globalAlpha = 1;
         }
       }
