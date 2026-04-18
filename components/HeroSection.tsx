@@ -1,15 +1,38 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 const ParticleCanvas = dynamic(() => import('./ParticleCanvas'), { ssr: false });
 
 export default function HeroSection() {
+  const blackoutRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const trigger = () => {
+      const el = blackoutRef.current;
+      if (!el) return;
+      el.classList.remove('blackout-active');
+      void el.offsetWidth; // force reflow
+      el.classList.add('blackout-active');
+    };
+
+    const id = setInterval(trigger, 15000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="relative flex flex-col min-h-screen bg-[#0a0a0a] overflow-hidden">
       <ParticleCanvas />
       {/* Dark overlay */}
       <div className="absolute inset-0" style={{ zIndex: 1, background: 'rgba(10,10,10,0.58)' }} />
+      {/* Blackout overlay */}
+      <div
+        ref={blackoutRef}
+        className="absolute inset-0 bg-[#0a0a0a] pointer-events-none"
+        style={{ zIndex: 15, opacity: 0 }}
+      />
+
       {/* Top status bar */}
       <div className="relative z-10 flex items-center justify-between px-6 py-3 border-b border-[#0033FF] text-xs text-[#0033FF] uppercase tracking-widest">
         <span>SYS://PORTFOLIO.V1</span>

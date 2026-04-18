@@ -97,15 +97,23 @@ body::before {
   animation-delay: 0.7s;
 }
 
-@keyframes bg-glitch {
-  0%, 90%, 100% { transform: translate(0, 0); opacity: 1; }
-  91% { transform: translate(-3px, 0); opacity: 0.9; }
-  92% { transform: translate(3px, 1px); opacity: 1; }
-  93% { transform: translate(-2px, -1px); opacity: 0.85; }
-  94% { transform: translate(0, 0); opacity: 1; }
+@keyframes blackout-seq {
+  0%   { opacity: 0; }
+  4%   { opacity: 0.85; }
+  6%   { opacity: 0.05; }
+  9%   { opacity: 0.95; }
+  11%  { opacity: 0.05; }
+  13%  { opacity: 1; }
+  55%  { opacity: 1; }
+  60%  { opacity: 0.05; }
+  64%  { opacity: 0.9; }
+  68%  { opacity: 0.1; }
+  72%  { opacity: 0.95; }
+  76%  { opacity: 0; }
+  100% { opacity: 0; }
 }
 
-.animate-bg-glitch { animation: bg-glitch 6s infinite; }
+.blackout-active { animation: blackout-seq 3.5s forwards; }
 
 .cyber-border {
   border: 1px solid #0033FF;

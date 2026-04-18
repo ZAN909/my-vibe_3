@@ -5,8 +5,8 @@ import { useEffect, useRef } from 'react';
 const FONT_SIZE = 11;
 const LINE_HEIGHT = 19;
 const GAP = 10;
-const HIGHLIGHT_CHANCE = 0.18;
-const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700', '#FF6600'];
+const HIGHLIGHT_CHANCE = 0.16;
+const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700'];
 
 const WORD_POOL = [
   'VHS', 'AUDIO', 'VISUAL', 'PERFORMANCE', 'GENERATIVE', 'INTERACTIVE',
@@ -14,10 +14,12 @@ const WORD_POOL = [
   'PROJECTION', 'MAPPING', 'SIGNAL', 'FREQUENCY', 'NOISE', 'PATTERN',
   'SYSTEM', 'FIELD', 'SPACE', 'TIME', 'BODY', 'SCREEN', 'LIGHT',
   'WAVE', 'PULSE', 'LOOP', 'MODULAR', 'ANALOG', 'DIGITAL', 'CODE',
-  'IMAGE', 'ARTIST', 'SEOUL', '추호승', '소리', '빛', '공간', '신체',
+  'IMAGE', 'ARTIST', '추호승', '소리', '빛', '공간', '신체',
   '경험', '생성', '반복', '신호', '파동', 'HO-SEUNG', 'CHOO',
-  'ABLETON', 'MAX/MSP', 'TOUCHDESIGNER', 'RESOLUME', 'AV',
-  '░░░░', '▓▓▓', '#####', '>>>', '___', '[VHS]', '{AV}', '///',
+  'ABLETON', 'MAX/MSP', 'TOUCHDESIGNER', 'RESOLUME', 'AV', 'SEOUL',
+  '37.5665°N', '126.9780°E', 'SYS://ACTIVE', 'KR-0091',
+  '░░░░', '▓▓▓', '#####', '>>>', '___', '[VHS]', '///ERROR///',
+  '경고', '시스템', 'OFF-WORLD', 'UNIT:01', '0x0033FF',
 ];
 
 type WordItem = {
@@ -30,7 +32,9 @@ type WordItem = {
 type Row = {
   y: number;
   direction: 1 | -1;
-  speed: number;
+  baseSpeed: number;
+  speedMult: number;
+  nextSpeedChange: number;
   offset: number;
   items: WordItem[];
   unitWidth: number;
@@ -82,12 +86,14 @@ function buildRow(
   }
 
   const direction = (index % 2 === 0 ? 1 : -1) as 1 | -1;
-  const speed = 0.4 + (index % 7) * 0.18;
+  const baseSpeed = 0.3 + Math.random() * 1.0;
 
   return {
     y,
     direction,
-    speed,
+    baseSpeed,
+    speedMult: 1.0,
+    nextSpeedChange: Math.floor(60 + Math.random() * 120),
     offset: Math.random() * unitWidth,
     items,
     unitWidth,
@@ -98,6 +104,7 @@ export default function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rowsRef = useRef<Row[]>([]);
   const rafRef = useRef<number>(0);
+  const frameRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -121,11 +128,22 @@ export default function ParticleCanvas() {
     window.addEventListener('resize', init);
 
     const tick = () => {
+      frameRef.current++;
+      const frame = frameRef.current;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.font = `${FONT_SIZE}px "Space Mono", monospace`;
 
       for (const row of rowsRef.current) {
-        row.offset += row.speed * row.direction;
+        // Random speed variation
+        if (frame >= row.nextSpeedChange) {
+          row.speedMult = 0.2 + Math.random() * 2.5;
+          row.nextSpeedChange = frame + 60 + Math.floor(Math.random() * 200);
+        }
+        // Gradually ease speedMult back toward 1
+        row.speedMult += (1.0 - row.speedMult) * 0.01;
+
+        row.offset += row.baseSpeed * row.speedMult * row.direction;
         if (row.offset >= row.unitWidth) row.offset -= row.unitWidth;
         if (row.offset < 0) row.offset += row.unitWidth;
 
@@ -142,7 +160,7 @@ export default function ParticleCanvas() {
             ctx.globalAlpha = 1;
             ctx.fillStyle = '#000000';
           } else {
-            ctx.globalAlpha = 0.55;
+            ctx.globalAlpha = 0.5;
             ctx.fillStyle = '#ffffff';
           }
 
@@ -164,7 +182,7 @@ export default function ParticleCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full animate-bg-glitch"
+      className="absolute inset-0 w-full h-full"
       style={{ zIndex: 0, filter: 'blur(1px)' }}
     />
   );
