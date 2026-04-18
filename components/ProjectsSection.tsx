@@ -24,6 +24,11 @@ export default function ProjectsSection() {
                     <h3 className="text-lg font-bold uppercase tracking-wide">
                       {project.title}
                     </h3>
+                    {project.year && (
+                      <span className="text-xs text-[#0033FF] group-hover:text-white/60 tracking-widest ml-auto sm:ml-0">
+                        {project.year}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-[#7fa8b8] group-hover:text-white/70 leading-relaxed mb-4 max-w-lg">
                     {project.description}
@@ -41,16 +46,6 @@ export default function ProjectsSection() {
                 </div>
 
                 <div className="flex gap-4 text-xs uppercase tracking-widest sm:flex-col sm:items-end">
-                  {project.githubUrl && (
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#333] group-hover:text-white hover:underline transition-colors"
-                    >
-                      GITHUB →
-                    </a>
-                  )}
                   {project.demoUrl && (
                     <a
                       href={project.demoUrl}
@@ -58,7 +53,7 @@ export default function ProjectsSection() {
                       rel="noopener noreferrer"
                       className="text-[#333] group-hover:text-white hover:underline transition-colors"
                     >
-                      DEMO →
+                      VIEW →
                     </a>
                   )}
                 </div>

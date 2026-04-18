@@ -5,9 +5,19 @@ const LINKS = [
     href: "mailto:hoseung89@naver.com",
   },
   {
-    label: "GITHUB",
-    value: "github.com/ZAN909",
-    href: "https://github.com/ZAN909",
+    label: "INSTAGRAM",
+    value: "@vhs_chs",
+    href: "https://www.instagram.com/vhs_chs",
+  },
+  {
+    label: "YOUTUBE",
+    value: "@VHS-w5r",
+    href: "https://www.youtube.com/@VHS-w5r",
+  },
+  {
+    label: "PORTFOLIO",
+    value: "vhs60.myportfolio.com",
+    href: "https://vhs60.myportfolio.com",
   },
 ];
 

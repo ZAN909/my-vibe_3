@@ -51,11 +51,12 @@ export default function AboutSection() {
               SOUND &<br />VISUAL<br />ARTIST
             </h2>
             <p className="text-sm leading-loose opacity-80 mb-6">
-              사운드 작업과 비주얼을 결합하는 오디오비주얼 아티스트입니다.
-              소리와 이미지가 교차하는 순간, 새로운 감각적 경험을 만들어냅니다.
+              하드웨어 신시사이저, 드럼 머신, 시퀀서와 실시간 생성 비주얼을 결합하는
+              오디오비주얼 아티스트. 아날로그 장비의 따뜻한 음색과 디지털 생성 이미지가
+              교차하는 몰입적 경험을 만든다. 자연의 비규칙성을 소리와 빛으로 번역한다.
             </p>
             <p className="text-xs uppercase tracking-widest opacity-60">
-              INTEREST: SOUND DESIGN · LIVE PERFORMANCE · EXPERIMENTAL VISUAL
+              INTEREST: AUDIOVISUAL PERFORMANCE · INTERACTIVE INSTALLATION · GENERATIVE ART
             </p>
           </div>
         </div>

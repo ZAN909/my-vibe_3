@@ -1,18 +1,17 @@
 export type Skill = {
   name: string;
-  category: "frontend" | "backend" | "devops" | "etc";
+  category: "visual" | "sound" | "performance" | "etc";
 };
 
 export const SKILLS: Skill[] = [
-  { name: "TypeScript", category: "frontend" },
-  { name: "React", category: "frontend" },
-  { name: "Next.js", category: "frontend" },
-  { name: "Tailwind CSS", category: "frontend" },
-  { name: "Node.js", category: "backend" },
-  { name: "Python", category: "backend" },
-  { name: "FastAPI", category: "backend" },
-  { name: "PostgreSQL", category: "backend" },
-  { name: "Docker", category: "devops" },
-  { name: "Git", category: "devops" },
-  { name: "Vercel", category: "devops" },
+  { name: "TouchDesigner", category: "visual" },
+  { name: "Projection Mapping", category: "visual" },
+  { name: "Generative Visual", category: "visual" },
+  { name: "VCV Rack", category: "sound" },
+  { name: "Hardware Synthesizers", category: "sound" },
+  { name: "Drum Machine / Sequencer", category: "sound" },
+  { name: "Sound Design", category: "sound" },
+  { name: "Live A/V Performance", category: "performance" },
+  { name: "Interactive Installation", category: "performance" },
+  { name: "Audiovisual Performance", category: "performance" },
 ];

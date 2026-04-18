@@ -1,9 +1,9 @@
 import { SKILLS } from "@/data/skills";
 
 const CATEGORY_LABEL: Record<string, string> = {
-  frontend: "FRONTEND",
-  backend: "BACKEND",
-  devops: "DEVOPS",
+  visual: "VISUAL",
+  sound: "SOUND",
+  performance: "PERFORMANCE",
   etc: "ETC",
 };
 
