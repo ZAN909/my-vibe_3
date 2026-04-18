@@ -7,7 +7,11 @@ const REPEL_RADIUS = 100;
 const REPEL_STRENGTH = 5;
 const SPRING = 0.05;
 const DAMPING = 0.85;
-const COLOR = '#0033FF';
+const RGB_CHANNELS = [
+  { color: '#FF2200', dx: -2, dy: -1 },
+  { color: '#0033FF', dx:  0, dy:  0 },
+  { color: '#00CFFF', dx:  2, dy:  1 },
+];
 
 const CHARS = [
   '#', '>', '_', '/', '|', '[', ']', '*', '░', '▓',
@@ -103,9 +107,11 @@ export default function ParticleCanvas() {
         p.y += p.vy;
 
         ctx.font = `${p.size}px "Space Mono", monospace`;
-        ctx.fillStyle = COLOR;
-        ctx.globalAlpha = p.opacity;
-        ctx.fillText(p.char, p.x, p.y);
+        for (const ch of RGB_CHANNELS) {
+          ctx.fillStyle = ch.color;
+          ctx.globalAlpha = p.opacity * 0.7;
+          ctx.fillText(p.char, p.x + ch.dx, p.y + ch.dy);
+        }
       }
 
       ctx.globalAlpha = 1;
