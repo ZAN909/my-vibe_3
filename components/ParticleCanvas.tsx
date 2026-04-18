@@ -2,11 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 
-const FONT_SIZE = 11;
-const LINE_HEIGHT = 19;
-const GAP = 10;
-const HIGHLIGHT_CHANCE = 0.16;
-const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700'];
+const FONT_SIZE = 10;
+const LINE_HEIGHT = 14;
+const GAP = 5;
+const HIGHLIGHT_CHANCE = 0.38;
+const HIGHLIGHT_COLORS = ['#0033FF', '#FF2200', '#00FFAA', '#00CFFF', '#FFD700', '#00FF41', '#00FF41', '#00FF41'];
 
 const WORD_POOL = [
   'VHS', 'AUDIO', 'VISUAL', 'PERFORMANCE', 'GENERATIVE', 'INTERACTIVE',
