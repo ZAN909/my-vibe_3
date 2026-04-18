@@ -1,4 +1,5 @@
 import WaveCanvas from './WaveCanvas';
+import GlitchText from './GlitchText';
 
 const LINKS = [
   {
@@ -34,7 +35,7 @@ export default function ContactSection() {
         </div>
 
         <h2 className="text-6xl sm:text-8xl uppercase leading-tight mb-16" style={{ fontFamily: "var(--font-vt323)" }}>
-          LET&apos;S<br />WORK<br />TOGETHER.
+          <GlitchText text="WEIRD IS THE POINT" />
         </h2>
 
         <div className="flex flex-col gap-px bg-white/20">
