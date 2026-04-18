@@ -7,14 +7,20 @@ const ParticleCanvas = dynamic(() => import('./ParticleCanvas'), { ssr: false })
 
 export default function HeroSection() {
   const blackoutRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const trigger = () => {
-      const el = blackoutRef.current;
-      if (!el) return;
-      el.classList.remove('blackout-active');
-      void el.offsetWidth; // force reflow
-      el.classList.add('blackout-active');
+      const overlay = blackoutRef.current;
+      const content = contentRef.current;
+      if (!overlay || !content) return;
+
+      overlay.classList.remove('blackout-active');
+      content.classList.remove('content-glitching');
+      void overlay.offsetWidth;
+
+      overlay.classList.add('blackout-active');
+      content.classList.add('content-glitching');
     };
 
     const id = setInterval(trigger, 15000);
@@ -43,7 +49,7 @@ export default function HeroSection() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-16">
+      <div ref={contentRef} className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-16">
         {/* Label */}
         <div className="text-xs text-[#0033FF] uppercase tracking-[0.3em] mb-6">
           [ AUDIOVISUAL ARTIST ]
