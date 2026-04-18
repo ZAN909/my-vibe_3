@@ -1,4 +1,5 @@
 import { SKILLS } from "@/data/skills";
+import WaveCanvas from './WaveCanvas';
 
 const CATEGORY_LABEL: Record<string, string> = {
   visual: "VISUAL",
@@ -11,7 +12,8 @@ export default function SkillsSection() {
   const categories = [...new Set(SKILLS.map((s) => s.category))];
 
   return (
-    <section id="skills" className="bg-[#0a0a0a] py-24">
+    <section id="skills" className="bg-[#0a0a0a] py-24 relative overflow-hidden">
+      <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12">
         {/* Section label */}
         <div className="text-xs text-[#0033FF] uppercase tracking-[0.3em] mb-12">

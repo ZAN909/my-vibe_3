@@ -1,8 +1,10 @@
 import { PROJECTS } from "@/data/projects";
+import WaveCanvas from './WaveCanvas';
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="bg-[#0d0d0d] py-24 border-t border-[#0033FF]">
+    <section id="projects" className="bg-[#0d0d0d] py-24 border-t border-[#0033FF] relative overflow-hidden">
+      <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12">
         {/* Section label */}
         <div className="text-xs text-[#0033FF] uppercase tracking-[0.3em] mb-12">

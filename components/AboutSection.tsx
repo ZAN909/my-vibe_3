@@ -1,6 +1,9 @@
+import WaveCanvas from './WaveCanvas';
+
 export default function AboutSection() {
   return (
-    <section id="about" className="section-blue">
+    <section id="about" className="section-blue relative overflow-hidden">
+      <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24">
         {/* Section label */}
         <div className="text-xs uppercase tracking-[0.3em] mb-12 opacity-60">

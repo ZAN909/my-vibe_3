@@ -1,3 +1,5 @@
+import WaveCanvas from './WaveCanvas';
+
 const LINKS = [
   {
     label: "EMAIL",
@@ -23,7 +25,8 @@ const LINKS = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="section-blue py-24">
+    <section id="contact" className="section-blue py-24 relative overflow-hidden">
+      <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12">
         {/* Section label */}
         <div className="text-xs uppercase tracking-[0.3em] mb-12 opacity-60">
