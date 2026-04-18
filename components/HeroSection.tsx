@@ -1,7 +1,19 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+
+const CYCLE_NAMES = ['추호승', 'HO SEUNG CHOO', 'VHS'];
+const GLITCH_CHARS = '#@%!▓░[]{}<>/\\|*~^&$Ξ≠≡';
+
+function scramble(text: string, intensity: number): string {
+  return text.split('').map(c => {
+    if (c === ' ') return c;
+    return Math.random() < intensity
+      ? GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)]
+      : c;
+  }).join('');
+}
 
 const ParticleCanvas = dynamic(() => import('./ParticleCanvas'), { ssr: false });
 
@@ -10,6 +22,10 @@ export default function HeroSection() {
   const contentRef = useRef<HTMLDivElement>(null);
   const sysErrorRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLDivElement>(null);
+
+  const nameIdxRef = useRef(0);
+  const [displayName, setDisplayName] = useState(CYCLE_NAMES[0]);
+  const [currentName, setCurrentName] = useState(CYCLE_NAMES[0]);
 
   useEffect(() => {
     const trigger = () => {
@@ -34,6 +50,32 @@ export default function HeroSection() {
 
     const id = setInterval(trigger, 15000);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const cycleId = setInterval(() => {
+      const nextIdx = (nameIdxRef.current + 1) % CYCLE_NAMES.length;
+      const fromName = CYCLE_NAMES[nameIdxRef.current];
+      const nextName = CYCLE_NAMES[nextIdx];
+
+      let frame = 0;
+      const totalFrames = 14;
+      const glitchId = setInterval(() => {
+        const intensity = Math.max(0, 0.9 - (frame / totalFrames) * 0.9);
+        if (intensity > 0) {
+          setDisplayName(scramble(fromName, intensity));
+        } else {
+          setDisplayName(nextName);
+          setCurrentName(nextName);
+          nameIdxRef.current = nextIdx;
+          clearInterval(glitchId);
+        }
+        frame++;
+        if (frame > totalFrames) clearInterval(glitchId);
+      }, 45);
+    }, 5000);
+
+    return () => clearInterval(cycleId);
   }, []);
 
   return (
@@ -108,9 +150,9 @@ export default function HeroSection() {
           <h1
             className="glitch-wrapper text-[clamp(4rem,12vw,10rem)] leading-none tracking-tight uppercase"
             style={{ fontFamily: "var(--font-vt323)" }}
-            data-text="추호승"
+            data-text={currentName}
           >
-            추호승
+            {displayName}
           </h1>
         </div>
 
@@ -142,7 +184,7 @@ export default function HeroSection() {
       {/* Bottom info bar */}
       <div className="relative z-10 flex items-center justify-between px-6 py-3 border-t border-[#1a1a1a] text-xs text-[#333] uppercase tracking-widest">
         <span>KR / SEOUL</span>
-        <span>© 2025 추호승</span>
+        <span>VHS © 2025</span>
         <span className="hidden sm:block">AUDIO · VISUAL · PERFORMANCE</span>
       </div>
     </section>
