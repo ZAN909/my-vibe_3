@@ -6,7 +6,6 @@ export default function ProjectsSection() {
     <section id="projects" className="bg-[#0d0d0d] py-24 border-t border-[#0033FF] relative overflow-hidden">
       <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12">
-        {/* Section label */}
         <div className="text-xs text-[#0033FF] uppercase tracking-[0.3em] mb-12">
           [ 03 / WORK ]
         </div>
@@ -19,18 +18,19 @@ export default function ProjectsSection() {
             >
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-4 mb-3">
+                  <div className="flex items-center gap-4 mb-2">
                     <span className="text-xs text-[#333] group-hover:text-white/40">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h3 className="text-lg font-bold uppercase tracking-wide">
                       {project.title}
                     </h3>
-                    {project.year && (
-                      <span className="text-xs text-[#0033FF] group-hover:text-white/60 tracking-widest ml-auto sm:ml-0">
-                        {project.year}
-                      </span>
-                    )}
+                    <span className="text-xs text-[#0033FF] group-hover:text-white/60 tracking-widest ml-auto sm:ml-0">
+                      {project.year}
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#00FFAA] group-hover:text-white/60 uppercase tracking-widest mb-3 ml-8">
+                    {project.role}
                   </div>
                   <p className="text-sm text-[#7fa8b8] group-hover:text-white/70 leading-relaxed mb-4 max-w-lg">
                     {project.description}
