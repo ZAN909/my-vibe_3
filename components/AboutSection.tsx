@@ -5,7 +5,6 @@ export default function AboutSection() {
     <section id="about" className="section-blue relative overflow-hidden">
       <WaveCanvas />
       <div className="max-w-5xl mx-auto px-6 sm:px-12 py-24">
-        {/* Section label */}
         <div className="text-xs uppercase tracking-[0.3em] mb-12 opacity-60">
           [ 01 / ABOUT ]
         </div>
@@ -20,7 +19,7 @@ export default function AboutSection() {
             <div className="border-b border-white/20 pb-4 mb-4">
               <div className="text-xs opacity-50 mb-1">NAME</div>
               <div className="text-3xl tracking-wider" style={{ fontFamily: "var(--font-vt323)" }}>추호승</div>
-              <div className="text-xs opacity-50 mt-1">HO-SEUNG CHOO</div>
+              <div className="text-xs opacity-50 mt-1">HO-SEUNG CHOO · vhs a.k.a ZAN</div>
             </div>
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div>
@@ -29,7 +28,7 @@ export default function AboutSection() {
               </div>
               <div>
                 <div className="opacity-50 mb-1">BASE</div>
-                <div>SEOUL, KR</div>
+                <div>SEONGNAM, KR</div>
               </div>
               <div>
                 <div className="opacity-50 mb-1">MEDIUM</div>
@@ -43,8 +42,16 @@ export default function AboutSection() {
                 </div>
               </div>
               <div className="col-span-2">
-                <div className="opacity-50 mb-1">LECTURE</div>
+                <div className="opacity-50 mb-1">EDUCATION</div>
+                <div>M.A. New Media Music, Sangmyung Univ.</div>
+              </div>
+              <div className="col-span-2">
+                <div className="opacity-50 mb-1">FACULTY AT</div>
                 <div>강서대 · 정화예대 · 상상마당 아카데미</div>
+              </div>
+              <div className="col-span-2">
+                <div className="opacity-50 mb-1">SOFTWARE</div>
+                <div>TouchDesigner · Ableton · VCV Rack · Max/MSP · Pro Tools · Resolume</div>
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-white/20 text-xs opacity-40 uppercase tracking-widest text-center">
@@ -58,12 +65,17 @@ export default function AboutSection() {
               AUDIO &<br />VISUAL<br />ARTIST
             </h2>
             <p className="text-sm leading-loose opacity-80 mb-6">
-              하드웨어 신시사이저, 드럼 머신, 시퀀서와 실시간 생성 비주얼을 결합하는
-              오디오비주얼 아티스트. 아날로그 장비의 따뜻한 음색과 디지털 생성 이미지가
-              교차하는 몰입적 경험을 만든다. 자연의 비규칙성을 소리와 빛으로 번역한다.
+              하드웨어 신시사이저 전문가이자 오디오비주얼 아티스트.
+              모듈러 합성과 실시간 생성 비주얼의 교차점에서 작업한다.
+              아날로그 장비의 따뜻한 음색과 디지털 생성 이미지가 충돌하는
+              몰입적 경험을 만든다.
+            </p>
+            <p className="text-sm leading-loose opacity-60 mb-6">
+              A hardware synthesizer specialist and audiovisual artist working at
+              the intersection of modular synthesis and real-time generative visuals.
             </p>
             <p className="text-xs uppercase tracking-widest opacity-60">
-              INTEREST: AUDIOVISUAL PERFORMANCE · INTERACTIVE INSTALLATION · GENERATIVE ART
+              AUDIO VISUAL · SOUND DESIGN · MEDIA ART · EDUCATION
             </p>
           </div>
         </div>
