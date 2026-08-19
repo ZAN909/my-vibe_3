@@ -14,8 +14,8 @@ const LINKS = [
   },
   {
     label: "YOUTUBE",
-    value: "@추호승-w5r",
-    href: "https://www.youtube.com/@추호승-w5r",
+    value: "@VHS-w5r",
+    href: "https://www.youtube.com/@VHS-w5r",
   },
   {
     label: "PORTFOLIO",
