@@ -8,9 +8,9 @@ export const SKILLS: Skill[] = [
   { name: "Resolume Arena", category: "visual" },
   { name: "Projection Mapping", category: "visual" },
   { name: "Generative Visual", category: "visual" },
+  { name: "Laser Art", category: "visual" },
   { name: "Ableton Live", category: "sound" },
   { name: "MAX/MSP", category: "sound" },
-  { name: "Bitwig", category: "sound" },
   { name: "Pro Tools", category: "sound" },
   { name: "VCV Rack", category: "sound" },
   { name: "Hardware Synthesizers", category: "sound" },
@@ -19,4 +19,5 @@ export const SKILLS: Skill[] = [
   { name: "Live A/V Performance", category: "performance" },
   { name: "Interactive Installation", category: "performance" },
   { name: "Audiovisual Performance", category: "performance" },
+  { name: "VJ", category: "performance" },
 ];
