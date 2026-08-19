@@ -15,7 +15,7 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: "추호승 — Audiovisual Artist",
+  title: "VHS — Audiovisual Artist",
   description: "사운드와 비주얼을 결합하는 오디오비주얼 아티스트 추호승의 포트폴리오.",
 };
 
