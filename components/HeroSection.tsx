@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 
-const CYCLE_NAMES = ['추호승', 'HO SEUNG CHOO', 'VHS'];
+const CYCLE_NAMES = ['VHS', '추호승', 'HO SEUNG CHOO'];
 const GLITCH_CHARS = '#@%!▓░[]{}<>/\\|*~^&$Ξ≠≡';
 
 function scramble(text: string, intensity: number): string {
